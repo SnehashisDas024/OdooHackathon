@@ -59,7 +59,11 @@ const EMPLOYEE_INCLUDE = {
 // POST /api/v1/employees — Admin: create new employee
 export async function createEmployee(req, res, next) {
   try {
-    const { name, email, phone, password, department, jobPosition, dateOfJoining, managerId, company, location, role = 'EMPLOYEE' } = req.validatedBody;
+    const {
+      name, email, phone, password, department, jobPosition, dateOfJoining, managerId, company, location, role = 'EMPLOYEE',
+      dateOfBirth, residingAddress, personalEmail, gender, nationality, maritalStatus,
+      panNo, uanNo, bankAccountNumber, bankName, ifscCode
+    } = req.validatedBody;
 
     // Check email not already used
     const existing = await prisma.user.findUnique({ where: { email } });
@@ -96,9 +100,21 @@ export async function createEmployee(req, res, next) {
           jobPosition,
           dateOfJoining: new Date(dateOfJoining),
           managerId: managerId || null,
-          company: company || 'Odoo India',
+          company: company || 'Odoo India Pvt. Ltd.',
           location,
           employeeCode,
+          mobile: phone || null,
+          dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
+          residingAddress: residingAddress || null,
+          personalEmail: personalEmail || null,
+          gender: gender || null,
+          nationality: nationality || null,
+          maritalStatus: maritalStatus || null,
+          panNo: panNo || null,
+          uanNo: uanNo || null,
+          bankAccountNumber: bankAccountNumber || null,
+          bankName: bankName || null,
+          ifscCode: ifscCode || null,
         },
         include: EMPLOYEE_INCLUDE,
       });

@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import { signIn, me, changePassword, refreshToken, signOut, forgotPassword } from '../controllers/authController.js';
+import { createEmployee } from '../controllers/employeeController.js';
+import { createEmployeeSchema } from '../validators/employeeValidators.js';
 import { authMiddleware } from '../middleware/authMiddleware.js';
 import { validateRequest } from '../middleware/validateRequest.js';
 import { signInSchema, changePasswordSchema, forgotPasswordSchema } from '../validators/authValidators.js';
@@ -19,5 +21,6 @@ router.post('/refresh', refreshToken);
 router.post('/sign-out', authMiddleware, signOut);
 router.get('/me', authMiddleware, me);
 router.post('/change-password', authMiddleware, validateRequest(changePasswordSchema), changePassword);
+router.post('/sign-up', validateRequest(createEmployeeSchema), createEmployee);
 
 export default router;
