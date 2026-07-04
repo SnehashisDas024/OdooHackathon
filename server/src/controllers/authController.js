@@ -41,8 +41,8 @@ export async function signIn(req, res, next) {
     const user = await prisma.user.findFirst({
       where: {
         OR: [
-          { loginId: loginIdOrEmail },
-          { email: loginIdOrEmail },
+          { loginId: { equals: loginIdOrEmail, mode: 'insensitive' } },
+          { email: { equals: loginIdOrEmail, mode: 'insensitive' } },
         ],
         isActive: true,
       },
