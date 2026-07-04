@@ -16,19 +16,32 @@ export async function checkIn(req, res, next) {
 
     const todayDate = new Date(new Date().toDateString()); // midnight
 
-    const record = await prisma.attendance.upsert({
-      where: { employeeId_date: { employeeId: employee.id, date: todayDate } },
-      create: {
-        employeeId: employee.id,
-        date: todayDate,
-        status: 'PRESENT',
-        checkIn: new Date(),
-      },
-      update: {
-        status: 'PRESENT',
-        checkIn: new Date(),
-      },
+    let record = await prisma.attendance.findUnique({
+      where: { employeeId_date: { employeeId: employee.id, date: todayDate } }
     });
+
+    if (record && record.checkIn) {
+      throw new BadRequestError('You have already checked in today.');
+    }
+
+    if (record) {
+      record = await prisma.attendance.update({
+        where: { id: record.id },
+        data: {
+          status: 'PRESENT',
+          checkIn: new Date(),
+        }
+      });
+    } else {
+      record = await prisma.attendance.create({
+        data: {
+          employeeId: employee.id,
+          date: todayDate,
+          status: 'PRESENT',
+          checkIn: new Date(),
+        }
+      });
+    }
 
     return success(res, { record }, 'Checked in! Have a great day.');
   } catch (err) { next(err); }
