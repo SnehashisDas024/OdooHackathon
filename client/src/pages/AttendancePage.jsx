@@ -19,14 +19,14 @@ export default function AttendancePage() {
   // Employee own attendance
   const { data: ownData, isLoading, isError, refetch } = useQuery({
     queryKey: ['attendance', 'me', format(today, 'yyyy-MM')],
-    queryFn: () => attendanceService.getOwn({ month: format(today, 'yyyy-MM') }).then((r) => r.data),
+    queryFn: () => attendanceService.getOwn({ month: format(today, 'yyyy-MM') }).then((r) => r.data.data),
     enabled: !isAdmin,
   });
 
   // Admin: today's all-employee attendance
   const { data: allData, isLoading: allLoading, isError: allError, refetch: allRefetch } = useQuery({
     queryKey: ['attendance', 'all', format(today, 'yyyy-MM-dd')],
-    queryFn: () => attendanceService.getAll({ date: format(today, 'yyyy-MM-dd') }).then((r) => r.data),
+    queryFn: () => attendanceService.getAll({ date: format(today, 'yyyy-MM-dd') }).then((r) => r.data.data),
     enabled: isAdmin,
   });
 
@@ -110,7 +110,7 @@ export default function AttendancePage() {
                     key={day.toISOString()}
                     className={clsx(
                       'border-b last:border-0 transition-colors',
-                      weekend || future ? 'opacity-40' : 'hover:bg-[--bg-canvas]'
+                      (weekend && !rec) || future ? 'opacity-40' : 'hover:bg-[--bg-canvas]'
                     )}
                     style={{ borderColor: 'var(--border-hairline)' }}
                   >
@@ -121,7 +121,7 @@ export default function AttendancePage() {
                       {format(day, 'EEE')}
                     </td>
                     <td className="px-4 py-3">
-                      {!future && !weekend && rec ? <Badge status={rec.status} /> : <span style={{ color: 'var(--ink-muted)' }}>—</span>}
+                      {!future && rec ? <Badge status={rec.status} /> : <span style={{ color: 'var(--ink-muted)' }}>—</span>}
                     </td>
                     <td className="px-4 py-3 font-mono text-xs" style={{ fontFamily: 'IBM Plex Mono, monospace', color: 'var(--ink-muted)' }}>
                       {rec?.checkIn ? formatTime(rec.checkIn) : '—'}

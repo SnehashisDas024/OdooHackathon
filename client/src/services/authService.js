@@ -13,4 +13,6 @@ export const authService = {
   me: () => api.get('/auth/me'),
   // POST /api/v1/auth/forgot-password
   forgotPassword: (data) => api.post('/auth/forgot-password', data),
+  // POST /api/v1/auth/sign-up
+  signUp: (data) => api.post('/auth/sign-up', data),
 };

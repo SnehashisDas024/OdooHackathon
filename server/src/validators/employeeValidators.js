@@ -12,6 +12,17 @@ export const createEmployeeSchema = z.object({
   company: z.string().optional(),
   location: z.string().optional(),
   role: z.enum(['EMPLOYEE', 'ADMIN']).default('EMPLOYEE'),
+  dateOfBirth: z.string().optional(),
+  gender: z.string().optional(),
+  nationality: z.string().optional(),
+  maritalStatus: z.string().optional(),
+  personalEmail: z.string().email().optional().or(z.literal('')),
+  residingAddress: z.string().optional(),
+  panNo: z.string().optional(),
+  uanNo: z.string().optional(),
+  bankName: z.string().optional(),
+  bankAccountNumber: z.string().optional(),
+  ifscCode: z.string().optional(),
 });
 
 export const updateEmployeeSchema = z.object({

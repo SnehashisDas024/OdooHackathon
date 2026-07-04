@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { success } from '../middleware/errorHandler.js';
 import { NotFoundError, BadRequestError } from '../errors/index.js';
-import { format, differenceInHours } from 'date-fns';
+import { format, differenceInMinutes } from 'date-fns';
 
 const prisma = new PrismaClient();
 
@@ -16,19 +16,32 @@ export async function checkIn(req, res, next) {
 
     const todayDate = new Date(new Date().toDateString()); // midnight
 
-    const record = await prisma.attendance.upsert({
-      where: { employeeId_date: { employeeId: employee.id, date: todayDate } },
-      create: {
-        employeeId: employee.id,
-        date: todayDate,
-        status: 'PRESENT',
-        checkIn: new Date(),
-      },
-      update: {
-        status: 'PRESENT',
-        checkIn: new Date(),
-      },
+    let record = await prisma.attendance.findUnique({
+      where: { employeeId_date: { employeeId: employee.id, date: todayDate } }
     });
+
+    if (record && record.checkIn) {
+      throw new BadRequestError('You have already checked in today.');
+    }
+
+    if (record) {
+      record = await prisma.attendance.update({
+        where: { id: record.id },
+        data: {
+          status: 'PRESENT',
+          checkIn: new Date(),
+        }
+      });
+    } else {
+      record = await prisma.attendance.create({
+        data: {
+          employeeId: employee.id,
+          date: todayDate,
+          status: 'PRESENT',
+          checkIn: new Date(),
+        }
+      });
+    }
 
     return success(res, { record }, 'Checked in! Have a great day.');
   } catch (err) { next(err); }
@@ -52,7 +65,8 @@ export async function checkOut(req, res, next) {
 
     const checkInTime = existing.checkIn;
     const checkOutTime = new Date();
-    const totalHours = differenceInHours(checkOutTime, checkInTime);
+    const totalMinutes = differenceInMinutes(checkOutTime, checkInTime);
+    const totalHours = totalMinutes / 60;
     const breakHours = (existing.breakMinutes || 0) / 60;
     const workHours = Math.max(0, totalHours - breakHours);
     const extraHours = Math.max(0, workHours - STANDARD_WORK_HOURS);

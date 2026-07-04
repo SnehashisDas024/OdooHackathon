@@ -74,6 +74,15 @@ export default function SignInPage() {
           </div>
         </div>
         <SignInForm />
+        
+        <div className="mt-6 text-center border-t pt-4" style={{ borderColor: 'var(--border-hairline)' }}>
+          <p className="text-xs" style={{ color: 'var(--ink-muted)' }}>
+            New here?{' '}
+            <a href="/sign-up" className="font-semibold transition-all hover:underline" style={{ color: 'var(--brand-primary)' }}>
+              Register as employee
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   );

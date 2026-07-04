@@ -61,7 +61,7 @@ function ApplyLeaveModal({ open, onClose }) {
     setLoading(true);
     try {
       await leaveService.apply({
-        type,
+        type: type.toUpperCase(),
         startDate: format(range.from, 'yyyy-MM-dd'),
         endDate: format(range.to || range.from, 'yyyy-MM-dd'),
         remarks,
@@ -153,23 +153,29 @@ export default function LeavePage() {
 
   const { data: balances } = useQuery({
     queryKey: ['leaveBalances'],
-    queryFn: () => leaveService.getBalances().then((r) => r.data),
+    queryFn: () => leaveService.getBalances().then((r) => r.data.data),
     placeholderData: { paid: { used: 0, total: 24 }, sick: { used: 0, total: 7 }, unpaid: { used: 0 } },
   });
 
   const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ['myLeaves'],
-    queryFn: () => leaveService.getOwn().then((r) => r.data),
+    queryKey: isAdmin ? ['allLeaves'] : ['myLeaves'],
+    queryFn: () => (isAdmin ? leaveService.getAll() : leaveService.getOwn()).then((r) => r.data?.data || r.data || r),
   });
 
   const queryClient = useQueryClient();
   const approveMutation = useMutation({
     mutationFn: ({ id, comment }) => leaveService.approve(id, comment),
-    onSuccess: () => { queryClient.invalidateQueries(['myLeaves']); toast.success('Leave approved.'); },
+    onSuccess: () => {
+      queryClient.invalidateQueries(isAdmin ? ['allLeaves'] : ['myLeaves']);
+      toast.success('Leave approved.');
+    },
   });
   const rejectMutation = useMutation({
     mutationFn: ({ id, comment }) => leaveService.reject(id, comment),
-    onSuccess: () => { queryClient.invalidateQueries(['myLeaves']); toast.success('Leave rejected.'); },
+    onSuccess: () => {
+      queryClient.invalidateQueries(isAdmin ? ['allLeaves'] : ['myLeaves']);
+      toast.success('Leave rejected.');
+    },
   });
 
   const leaves = data?.leaves || [];

@@ -7,6 +7,7 @@ import AdminRoute from './AdminRoute';
 // Pages
 import SignInPage from '../pages/SignInPage';
 import SignUpPage from '../pages/SignUpPage';
+import PublicSignUpPage from '../pages/PublicSignUpPage';
 import DashboardPage from '../pages/DashboardPage';
 import ProfilePage from '../pages/ProfilePage';
 import AttendancePage from '../pages/AttendancePage';
@@ -24,6 +25,7 @@ export default function AppRoutes() {
       {/* Auth */}
       <Route element={<AuthLayout />}>
         <Route path="/sign-in" element={<SignInPage />} />
+        <Route path="/sign-up" element={<PublicSignUpPage />} />
         <Route path="/change-password" element={<ChangePasswordPage />} />
       </Route>
 

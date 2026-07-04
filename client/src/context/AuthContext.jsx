@@ -1,11 +1,13 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { authService } from '../services/authService';
+import { useQueryClient } from '@tanstack/react-query';
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
 
   // On app boot, try to hydrate user from the httpOnly cookie via /auth/me
   const fetchMe = useCallback(async () => {
@@ -27,12 +29,14 @@ export function AuthProvider({ children }) {
     const res = await authService.signIn(credentials);
     const payload = res.data?.data || res.data;
     const userData = payload?.user || payload;
+    queryClient.clear();
     setUser(userData);
     return { user: userData, mustChangePassword: payload?.mustChangePassword };
   };
 
   const signOut = async () => {
     try { await authService.signOut(); } catch { /* ignore */ }
+    queryClient.clear();
     setUser(null);
   };
 
