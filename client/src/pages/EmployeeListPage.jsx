@@ -19,7 +19,7 @@ export default function EmployeeListPage() {
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['employees'],
-    queryFn: () => employeeService.getAll().then((r) => r.data),
+    queryFn: () => employeeService.getAll().then((r) => r.data?.data || r.data || r),
   });
 
   const employees = data?.employees || [];

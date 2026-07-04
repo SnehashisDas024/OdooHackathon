@@ -25,7 +25,7 @@ function Row({ label, value, desc, isDeduction, isBold }) {
 export default function PayrollView({ employeeId }) {
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['payroll', employeeId],
-    queryFn: () => (employeeId ? payrollService.getByEmployee(employeeId) : payrollService.getOwn()).then((r) => r.data),
+    queryFn: () => (employeeId ? payrollService.getByEmployee(employeeId) : payrollService.getOwn()).then((r) => r.data?.data || r.data || r),
   });
 
   if (isLoading) return <BufferAnimation variant="coin-stack" size="md" caption="Fetching your payslip…" />;

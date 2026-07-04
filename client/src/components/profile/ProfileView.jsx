@@ -36,7 +36,7 @@ export default function ProfileView({ employeeId, readOnly = false }) {
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['employee', effectiveId],
-    queryFn: () => (employeeId ? employeeService.getById(effectiveId) : employeeService.getMe()).then((r) => r.data.data),
+    queryFn: () => (employeeId ? employeeService.getById(effectiveId) : employeeService.getMe()).then((r) => r.data?.data || r.data || r),
     enabled: !!effectiveId,
   });
 

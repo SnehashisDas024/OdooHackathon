@@ -29,7 +29,7 @@ export default function PayrollEditForm({ employeeId }) {
 
   const { data, isLoading } = useQuery({
     queryKey: ['payroll', employeeId],
-    queryFn: () => payrollService.getByEmployee(employeeId).then((r) => r.data),
+    queryFn: () => payrollService.getByEmployee(employeeId).then((r) => r.data?.data || r.data || r),
     enabled: !!employeeId,
   });
 
