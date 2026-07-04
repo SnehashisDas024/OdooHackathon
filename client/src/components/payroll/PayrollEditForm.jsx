@@ -31,16 +31,34 @@ export default function PayrollEditForm({ employeeId }) {
     queryKey: ['payroll', employeeId],
     queryFn: () => payrollService.getByEmployee(employeeId).then((r) => r.data),
     enabled: !!employeeId,
-    onSuccess: (d) => {
-      const w = d?.payroll?.monthlyWage || d?.monthlyWage || '';
-      setWage(String(w));
-      setComponents(calculateSalaryComponents(w));
-    },
   });
 
   useEffect(() => {
+    if (data) {
+      const p = data.payroll || data;
+      const w = p?.monthlyWage || 0;
+      setWage(w > 0 ? String(w) : '');
+      setComponents({
+        basic: p.basicSalary || 0,
+        hra: p.hra || 0,
+        standardAllowance: p.standardAllowance || 0,
+        performanceBonus: p.performanceBonus || 0,
+        lta: p.lta || 0,
+        fixedAllowance: p.fixedAllowance || 0,
+        pfContribution: p.pfContribution || 0,
+        professionalTax: p.professionalTax || 0,
+        netPayable: p.netPayable || 0,
+      });
+    }
+  }, [data]);
+
+  useEffect(() => {
     const debounce = setTimeout(() => {
-      if (wage) setComponents(calculateSalaryComponents(parseFloat(wage)));
+      if (wage) {
+        setComponents(calculateSalaryComponents(parseFloat(wage)));
+      } else {
+        setComponents({});
+      }
     }, 200);
     return () => clearTimeout(debounce);
   }, [wage]);

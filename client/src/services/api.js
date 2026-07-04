@@ -21,7 +21,7 @@ function processQueue(error) {
 }
 
 api.interceptors.response.use(
-  (res) => res,
+  (res) => res.data,
   async (err) => {
     const originalRequest = err.config;
 

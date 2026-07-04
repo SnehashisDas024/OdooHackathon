@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { ChevronDown, User, LogOut, Clock, CheckCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
@@ -11,6 +12,7 @@ import toast from 'react-hot-toast';
 export default function Header() {
   const { user, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [dropOpen, setDropOpen] = useState(false);
   const [checkInData, setCheckInData] = useState(null);
   const [checkLoading, setCheckLoading] = useState(false);
@@ -24,9 +26,28 @@ export default function Header() {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
+  // Load today's check-in status on mount
+  useEffect(() => {
+    if (isAdmin) return;
+    let active = true;
+    async function fetchStatus() {
+      try {
+        const { data: res } = await attendanceService.getTodayStatus();
+        const record = res?.record || res?.data?.record;
+        if (active && record) {
+          setCheckInData(record);
+        }
+      } catch (err) {
+        console.error('Failed to fetch today status:', err);
+      }
+    }
+    fetchStatus();
+    return () => { active = false; };
+  }, [isAdmin]);
+
   // Elapsed timer
   useEffect(() => {
-    if (!checkInData?.checkIn) return;
+    if (!checkInData?.checkIn || checkInData.checkOut) return;
     const id = setInterval(() => {
       const diff = Math.floor((Date.now() - new Date(checkInData.checkIn).getTime()) / 1000);
       const h = Math.floor(diff / 3600);
@@ -40,9 +61,11 @@ export default function Header() {
   const handleCheckIn = async () => {
     setCheckLoading(true);
     try {
-      const { data } = await attendanceService.checkIn();
-      setCheckInData(data);
+      const { data: res } = await attendanceService.checkIn();
+      const record = res?.record || res?.data?.record || res;
+      setCheckInData(record);
       toast.success('Checked in! Have a great day.');
+      queryClient.invalidateQueries(['attendance']);
     } catch {
       toast.error('Could not check in. Try again.');
     } finally {
@@ -53,10 +76,12 @@ export default function Header() {
   const handleCheckOut = async () => {
     setCheckLoading(true);
     try {
-      await attendanceService.checkOut();
-      setCheckInData(null);
+      const { data: res } = await attendanceService.checkOut();
+      const record = res?.record || res?.data?.record || res;
+      setCheckInData(record);
       setElapsed('');
       toast.success('Checked out. See you tomorrow!');
+      queryClient.invalidateQueries(['attendance']);
     } catch {
       toast.error('Could not check out. Try again.');
     } finally {
@@ -81,7 +106,7 @@ export default function Header() {
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl border" style={{ borderColor: 'var(--border-hairline)' }}>
             <BufferAnimation variant="clock-spin" size="sm" caption="" />
           </div>
-        ) : checkInData ? (
+        ) : (checkInData && !checkInData.checkOut) ? (
           <button
             onClick={handleCheckOut}
             className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl border transition-all hover:bg-[--bg-canvas]"

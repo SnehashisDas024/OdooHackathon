@@ -33,7 +33,19 @@ export default function PayrollView({ employeeId }) {
 
   const payroll = data?.payroll || data;
   const wage = payroll?.monthlyWage || 0;
-  const c = calculateSalaryComponents(wage);
+  const c = payroll ? {
+    basic: payroll.basicSalary,
+    hra: payroll.hra,
+    standardAllowance: payroll.standardAllowance,
+    performanceBonus: payroll.performanceBonus,
+    lta: payroll.lta,
+    fixedAllowance: payroll.fixedAllowance,
+    pfContribution: payroll.pfContribution,
+    professionalTax: payroll.professionalTax,
+    grossSalary: payroll.monthlyWage,
+    totalDeductions: payroll.pfContribution + payroll.professionalTax,
+    netPayable: payroll.netPayable,
+  } : calculateSalaryComponents(wage);
 
   return (
     <div className="flex flex-col gap-6">

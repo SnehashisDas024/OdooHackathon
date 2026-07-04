@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { success } from '../middleware/errorHandler.js';
 import { NotFoundError, BadRequestError } from '../errors/index.js';
-import { format, differenceInHours } from 'date-fns';
+import { format, differenceInMinutes } from 'date-fns';
 
 const prisma = new PrismaClient();
 
@@ -27,6 +27,7 @@ export async function checkIn(req, res, next) {
       update: {
         status: 'PRESENT',
         checkIn: new Date(),
+        checkOut: null,
       },
     });
 
@@ -52,7 +53,8 @@ export async function checkOut(req, res, next) {
 
     const checkInTime = existing.checkIn;
     const checkOutTime = new Date();
-    const totalHours = differenceInHours(checkOutTime, checkInTime);
+    const totalMinutes = differenceInMinutes(checkOutTime, checkInTime);
+    const totalHours = totalMinutes / 60;
     const breakHours = (existing.breakMinutes || 0) / 60;
     const workHours = Math.max(0, totalHours - breakHours);
     const extraHours = Math.max(0, workHours - STANDARD_WORK_HOURS);

@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
 import { UserPlus, Copy, Check, Info } from 'lucide-react';
 import { signUpSchema } from '../../utils/validators';
-import { authService } from '../../services/authService';
+import { employeeService } from '../../services/employeeService';
 import Input from '../common/Input';
 import Button from '../common/Button';
 import PasswordRulesHint from './PasswordRulesHint';
@@ -40,13 +41,19 @@ export default function SignUpForm() {
     formState: { errors },
   } = useForm({ resolver: zodResolver(signUpSchema) });
 
+  const queryClient = useQueryClient();
   const password = watch('password', '');
 
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      const { data: res } = await authService.createEmployee(data);
-      setResult(res);
+      const payload = {
+        ...data,
+        role: data.role === 'hr' ? 'ADMIN' : 'EMPLOYEE',
+      };
+      const { data: res } = await employeeService.create(payload);
+      setResult(res?.employee ? res : (res?.data || res));
+      queryClient.invalidateQueries(['employees']);
     } catch (err) {
       console.error(err);
     } finally {
@@ -103,9 +110,9 @@ export default function SignUpForm() {
               Temporary Password
             </label>
             <div className="flex items-center gap-2">
-              <span className="id-pill flex-1 text-[--accent-coral]">{result.tempPassword}</span>
+              <span className="id-pill flex-1 text-[--accent-coral]">{result.temporaryPassword || result.tempPassword}</span>
               <button
-                onClick={() => handleCopy(result.tempPassword)}
+                onClick={() => handleCopy(result.temporaryPassword || result.tempPassword)}
                 className="p-2 rounded-lg hover:bg-white transition-colors"
                 aria-label="Copy password"
               >

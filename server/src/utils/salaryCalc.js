@@ -3,7 +3,21 @@
  * MUST match the client-side calculateSalaryComponents() in utils/constants.js exactly.
  */
 export function calculateSalaryComponents(monthlyWage) {
-  const M = parseFloat(monthlyWage);
+  const M = parseFloat(monthlyWage) || 0;
+  if (M === 0) {
+    return {
+      monthlyWage: 0,
+      basicSalary: 0,
+      hra: 0,
+      standardAllowance: 0,
+      performanceBonus: 0,
+      lta: 0,
+      fixedAllowance: 0,
+      pfContribution: 0,
+      professionalTax: 0,
+      netPayable: 0,
+    };
+  }
   const basicSalary = M * 0.5;
   const hra = basicSalary * 0.5;
   const standardAllowance = 4167;

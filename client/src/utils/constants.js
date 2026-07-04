@@ -43,6 +43,21 @@ export const SALARY_FORMULAS = {
 
 export const calculateSalaryComponents = (monthlyWage) => {
   const wage = parseFloat(monthlyWage) || 0;
+  if (wage === 0) {
+    return {
+      basic: 0,
+      hra: 0,
+      standardAllowance: 0,
+      performanceBonus: 0,
+      lta: 0,
+      fixedAllowance: 0,
+      pfContribution: 0,
+      professionalTax: 0,
+      grossSalary: 0,
+      totalDeductions: 0,
+      netPayable: 0,
+    };
+  }
   const basic = wage * 0.5;
   const hra = basic * 0.5;
   const standardAllowance = 4167;
@@ -51,7 +66,7 @@ export const calculateSalaryComponents = (monthlyWage) => {
   const pfContribution = basic * 0.12;
   const professionalTax = 200;
   const allComponents = basic + hra + standardAllowance + performanceBonus + lta;
-  const fixedAllowance = Math.max(0, wage - allComponents);
+  const fixedAllowance = wage - allComponents;
   const grossSalary = wage;
   const totalDeductions = pfContribution + professionalTax;
   const netPayable = grossSalary - totalDeductions;

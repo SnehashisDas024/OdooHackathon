@@ -158,18 +158,24 @@ export default function LeavePage() {
   });
 
   const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ['myLeaves'],
-    queryFn: () => leaveService.getOwn().then((r) => r.data),
+    queryKey: isAdmin ? ['allLeaves'] : ['myLeaves'],
+    queryFn: () => (isAdmin ? leaveService.getAll() : leaveService.getOwn()).then((r) => r.data),
   });
 
   const queryClient = useQueryClient();
   const approveMutation = useMutation({
     mutationFn: ({ id, comment }) => leaveService.approve(id, comment),
-    onSuccess: () => { queryClient.invalidateQueries(['myLeaves']); toast.success('Leave approved.'); },
+    onSuccess: () => {
+      queryClient.invalidateQueries(isAdmin ? ['allLeaves'] : ['myLeaves']);
+      toast.success('Leave approved.');
+    },
   });
   const rejectMutation = useMutation({
     mutationFn: ({ id, comment }) => leaveService.reject(id, comment),
-    onSuccess: () => { queryClient.invalidateQueries(['myLeaves']); toast.success('Leave rejected.'); },
+    onSuccess: () => {
+      queryClient.invalidateQueries(isAdmin ? ['allLeaves'] : ['myLeaves']);
+      toast.success('Leave rejected.');
+    },
   });
 
   const leaves = data?.leaves || [];
