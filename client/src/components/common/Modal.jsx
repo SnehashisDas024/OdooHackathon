@@ -28,17 +28,16 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
     >
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+        className="absolute inset-0 bg-[#ECF0F3]/70 backdrop-blur-sm"
         onClick={onClose}
         aria-hidden="true"
       />
       {/* Panel */}
       <div
-        className={`relative bg-white rounded-2xl shadow-2xl w-full ${sizes[size]} max-h-[90vh] flex flex-col`}
-        style={{ border: '1px solid var(--border-hairline)' }}
+        className={`neumorphic-convex relative rounded-2xl w-full ${sizes[size]} max-h-[90vh] flex flex-col`}
       >
-        <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b" style={{ borderColor: 'var(--border-hairline)' }}>
-          <h2 id="modal-title" className="text-lg font-semibold" style={{ fontFamily: 'Sora, sans-serif', color: 'var(--ink-primary)' }}>
+        <div className="flex items-center justify-between px-6 pt-5 pb-4">
+          <h2 id="modal-title" className="text-lg font-medium" style={{ fontFamily: 'Avenir Next, Nunito, Inter, sans-serif', color: 'var(--ink-primary)' }}>
             {title}
           </h2>
           <Button variant="ghost" size="sm" onClick={onClose} aria-label="Close modal">

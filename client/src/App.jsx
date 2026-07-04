@@ -25,21 +25,21 @@ export default function App() {
             gutter={8}
             toastOptions={{
               style: {
-                fontFamily: 'Inter, sans-serif',
+                fontFamily: 'Avenir Next, Nunito, Inter, sans-serif',
                 fontSize: '14px',
-                color: '#1B2559',
-                background: '#ffffff',
-                border: '1px solid #E3E8F4',
-                borderRadius: '12px',
-                boxShadow: '0 4px 20px rgba(27,37,89,0.10)',
+                color: '#2C343C',
+                background: '#ECF0F3',
+                border: '0',
+                borderRadius: '16px',
+                boxShadow: '10px 10px 20px rgba(22,27,29,0.23), -10px -10px 20px #FAFBFB',
                 padding: '12px 16px',
               },
               success: {
-                iconTheme: { primary: '#22C55E', secondary: '#DCFCE7' },
+                iconTheme: { primary: '#6EA985', secondary: '#E5F1E9' },
                 duration: 3000,
               },
               error: {
-                iconTheme: { primary: '#EF4444', secondary: '#FEE2E2' },
+                iconTheme: { primary: '#C77777', secondary: '#F2E3E3' },
                 duration: 5000,
               },
             }}

@@ -19,15 +19,12 @@ const Input = forwardRef(function Input(
         aria-invalid={!!error}
         aria-describedby={error ? `${id}-error` : hint ? `${id}-hint` : undefined}
         className={clsx(
-          'w-full px-4 py-2.5 rounded-xl text-sm border transition-all',
-          'focus:outline-none focus:ring-2 focus:ring-[--brand-primary] focus:border-transparent',
-          'placeholder:text-[--ink-muted]',
-          error
-            ? 'border-[--status-danger] bg-red-50'
-            : 'border-[--border-hairline] bg-white',
+          'neumorphic-concave w-full px-4 py-2.5 rounded-xl text-sm transition-all',
+          'focus:outline-none placeholder:text-[--ink-soft]',
+          error && 'text-[--status-danger]',
           className
         )}
-        style={{ color: 'var(--ink-primary)', fontFamily: 'Inter, sans-serif' }}
+        style={{ color: 'var(--ink-primary)', fontFamily: 'Avenir Next, Nunito, Inter, sans-serif' }}
         {...props}
       />
       {error && (

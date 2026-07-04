@@ -20,7 +20,7 @@ export default function Avatar({ name, src, size = 'md', className }) {
       <img
         src={src}
         alt={name || 'User avatar'}
-        className={clsx('rounded-full object-cover flex-shrink-0', sizes[size], className)}
+        className={clsx('neumorphic-circle rounded-full object-cover flex-shrink-0 p-1', sizes[size], className)}
       />
     );
   }
@@ -28,11 +28,11 @@ export default function Avatar({ name, src, size = 'md', className }) {
   return (
     <div
       className={clsx(
-        'rounded-full flex-shrink-0 flex items-center justify-center font-semibold text-white select-none',
+        'neumorphic-circle rounded-full flex-shrink-0 flex items-center justify-center font-medium select-none',
         sizes[size],
         className
       )}
-      style={{ background: 'var(--brand-primary)', fontFamily: 'Sora, sans-serif' }}
+      style={{ color: 'var(--ink-primary)', fontFamily: 'Avenir Next, Nunito, Inter, sans-serif' }}
       aria-label={name || 'User avatar'}
     >
       {initials}

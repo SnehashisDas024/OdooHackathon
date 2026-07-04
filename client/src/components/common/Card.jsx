@@ -3,7 +3,7 @@ import clsx from 'clsx';
 export default function Card({ children, className, hover = true, onClick, ...props }) {
   return (
     <div
-      className={clsx('card p-5', hover && 'cursor-default', onClick && 'cursor-pointer', className)}
+      className={clsx('card neumorphic-convex p-6', hover && 'cursor-default', onClick && 'cursor-pointer', className)}
       onClick={onClick}
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}

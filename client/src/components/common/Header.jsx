@@ -95,8 +95,7 @@ export default function Header() {
     <header className="top-header justify-between px-6 gap-4">
       {/* Company */}
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold md:hidden"
-          style={{ background: 'var(--brand-primary)' }}>H</div>
+        <div className="logo-mark w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium md:hidden">H</div>
         <span className="font-semibold text-sm hidden sm:block" style={{ color: 'var(--ink-muted)' }}>
           {user?.company || 'Odoo India'}
         </span>
@@ -105,29 +104,27 @@ export default function Header() {
       <div className="flex items-center gap-3">
         {/* Check in/out systray */}
         {checkLoading ? (
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl border" style={{ borderColor: 'var(--border-hairline)' }}>
+          <div className="soft-action flex items-center gap-2 px-3 py-1.5 rounded-xl">
             <BufferAnimation variant="clock-spin" size="sm" caption="" />
           </div>
         ) : checkInData?.checkIn && !checkInData?.checkOut ? (
           <button
             onClick={handleCheckOut}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl border transition-all hover:bg-[--bg-canvas]"
-            style={{ borderColor: 'var(--border-hairline)', color: 'var(--ink-primary)' }}
+            className="soft-action check-out-action flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl transition-all"
           >
-            <CheckCircle size={16} color="var(--status-present)" />
+            <CheckCircle size={16} />
             <span className="font-mono text-xs">{elapsed}</span>
             <span>Check Out</span>
           </button>
         ) : checkInData?.checkOut ? (
-          <div className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl border bg-[--bg-canvas]" style={{ borderColor: 'var(--border-hairline)', color: 'var(--ink-muted)' }}>
+          <div className="checked-out-pill flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl">
              <CheckCircle size={16} />
              <span>Checked Out</span>
           </div>
         ) : (
           <button
             onClick={handleCheckIn}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl text-white transition-all hover:opacity-90"
-            style={{ background: 'var(--status-present)' }}
+            className="soft-action check-in-action flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl transition-all"
           >
             <Clock size={16} />
             Check In
@@ -138,7 +135,7 @@ export default function Header() {
         <div className="relative" ref={dropRef}>
           <button
             onClick={() => setDropOpen((v) => !v)}
-            className="flex items-center gap-2 rounded-xl p-1.5 hover:bg-[--bg-canvas] transition-all"
+            className="soft-action flex items-center gap-2 rounded-xl p-1.5 transition-all"
             aria-expanded={dropOpen}
             aria-haspopup="true"
             aria-label="User menu"
@@ -149,22 +146,21 @@ export default function Header() {
 
           {dropOpen && (
             <div
-              className="absolute right-0 top-full mt-2 w-44 rounded-2xl shadow-lg py-2 z-50"
-              style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-hairline)' }}
+              className="neumorphic-convex absolute right-0 top-full mt-2 w-44 rounded-2xl py-2 z-50"
               role="menu"
             >
               <button
                 onClick={() => { navigate('/profile'); setDropOpen(false); }}
-                className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm hover:bg-[--bg-canvas] transition-all"
+                className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm transition-all"
                 style={{ color: 'var(--ink-primary)' }}
                 role="menuitem"
               >
                 <User size={15} /> My Profile
               </button>
-              <hr style={{ borderColor: 'var(--border-hairline)', margin: '4px 0' }} />
+              <hr className="divider" style={{ margin: '4px 0' }} />
               <button
                 onClick={() => { signOut(); navigate('/sign-in'); }}
-                className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm hover:bg-red-50 transition-all"
+                className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm transition-all"
                 style={{ color: 'var(--status-danger)' }}
                 role="menuitem"
               >

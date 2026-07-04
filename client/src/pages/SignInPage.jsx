@@ -36,14 +36,13 @@ function SignInIllustration() {
 
 export default function SignInPage() {
   return (
-    <div className="w-full max-w-4xl bg-white rounded-3xl shadow-2xl overflow-hidden flex min-h-[520px]"
-      style={{ border: '1px solid var(--border-hairline)' }}>
+    <div className="neumorphic-convex w-full max-w-4xl rounded-3xl overflow-hidden flex min-h-[520px]">
       {/* Left – illustration */}
       <div className="hidden md:flex flex-col items-center justify-center flex-1 p-10 gap-6"
-        style={{ background: 'linear-gradient(145deg, #EEF2FF 0%, #FFF0EB 100%)' }}>
+        style={{ background: 'var(--bg-surface)' }}>
         <SignInIllustration />
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-2" style={{ fontFamily: 'Sora, sans-serif', color: 'var(--ink-primary)' }}>
+          <h1 className="text-2xl font-medium mb-2" style={{ fontFamily: 'Avenir Next, Nunito, Inter, sans-serif', color: 'var(--ink-primary)' }}>
             Welcome back
           </h1>
           <p className="text-sm" style={{ color: 'var(--ink-muted)' }}>
@@ -56,19 +55,18 @@ export default function SignInPage() {
       <div className="flex flex-col justify-center w-full md:max-w-sm p-8 md:p-10">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center text-white font-bold"
-              style={{ background: 'var(--brand-primary)', fontFamily: 'Sora, sans-serif' }}>H</div>
-            <span className="font-bold text-lg" style={{ fontFamily: 'Sora, sans-serif', color: 'var(--ink-primary)' }}>HRMS</span>
+            <div className="logo-mark w-9 h-9 rounded-full flex items-center justify-center font-medium">H</div>
+            <span className="font-medium text-lg" style={{ fontFamily: 'Avenir Next, Nunito, Inter, sans-serif', color: 'var(--ink-primary)' }}>HRMS</span>
           </div>
-          <h2 className="text-2xl font-bold" style={{ fontFamily: 'Sora, sans-serif', color: 'var(--ink-primary)' }}>Sign In</h2>
+          <h2 className="text-2xl font-medium" style={{ fontFamily: 'Avenir Next, Nunito, Inter, sans-serif', color: 'var(--ink-primary)' }}>Sign In</h2>
           <p className="text-sm mt-1" style={{ color: 'var(--ink-muted)' }}>
             Use your Login ID or email to continue.
           </p>
         </div>
         {/* Demo credentials banner */}
-        <div className="mb-5 p-3 rounded-xl text-xs" style={{ background: '#EEF2FF', border: '1px solid #C7D2FE' }}>
-          <p className="font-semibold mb-1.5" style={{ color: 'var(--brand-primary)', fontFamily: 'Sora, sans-serif' }}>Demo Accounts</p>
-          <div className="flex flex-col gap-1" style={{ color: '#3730A3', fontFamily: 'IBM Plex Mono, monospace' }}>
+        <div className="neumorphic-concave mb-5 p-3 rounded-xl text-xs">
+          <p className="font-medium mb-1.5" style={{ color: 'var(--ink-primary)', fontFamily: 'Avenir Next, Nunito, Inter, sans-serif' }}>Demo Accounts</p>
+          <div className="flex flex-col gap-1" style={{ color: 'var(--ink-muted)', fontFamily: 'IBM Plex Mono, monospace' }}>
             <span>👑 admin@hrms.com / Admin@1234</span>
             <span>👤 arjun.sharma@hrms.com / Employee@1234</span>
           </div>

@@ -31,12 +31,12 @@ export default function Sidebar() {
   const SidebarContent = () => (
     <div className="flex flex-col h-full">
       {/* Logo */}
-      <div className="flex items-center gap-3 px-6 py-5 border-b" style={{ borderColor: 'var(--border-hairline)' }}>
-        <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm"
-          style={{ background: 'var(--brand-primary)', fontFamily: 'Sora, sans-serif' }}>
+      <div className="flex items-center gap-3 px-6 py-5">
+        <div className="logo-mark w-9 h-9 rounded-full flex items-center justify-center font-medium text-sm"
+          style={{ fontFamily: 'Avenir Next, Nunito, Inter, sans-serif' }}>
           H
         </div>
-        <span className="font-bold text-base" style={{ fontFamily: 'Sora, sans-serif', color: 'var(--ink-primary)' }}>
+        <span className="font-medium text-base" style={{ fontFamily: 'Avenir Next, Nunito, Inter, sans-serif', color: 'var(--ink-primary)' }}>
           HRMS
         </span>
       </div>
@@ -50,10 +50,10 @@ export default function Sidebar() {
             onClick={() => setMobileOpen(false)}
             className={({ isActive }) =>
               clsx(
-                'flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all',
+                'soft-action flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all',
                 isActive
-                  ? 'bg-[--brand-primary] text-white shadow-sm'
-                  : 'text-[--ink-muted] hover:bg-[--bg-canvas] hover:text-[--ink-primary]'
+                  ? 'text-[--ink-primary]'
+                  : 'text-[--ink-muted] hover:text-[--ink-primary]'
               )
             }
           >
@@ -64,7 +64,7 @@ export default function Sidebar() {
       </nav>
 
       {/* User + Logout */}
-      <div className="px-4 py-4 border-t flex flex-col gap-2" style={{ borderColor: 'var(--border-hairline)' }}>
+      <div className="px-4 py-4 flex flex-col gap-2">
         <div className="flex items-center gap-3 px-2 py-2">
           <Avatar name={user?.name} src={user?.profilePictureUrl} size="sm" />
           <div className="flex-1 min-w-0">
@@ -74,7 +74,7 @@ export default function Sidebar() {
         </div>
         <button
           onClick={handleSignOut}
-          className="flex items-center gap-2.5 px-4 py-2 text-sm rounded-xl transition-all w-full text-left hover:bg-red-50"
+          className="soft-action check-out-action flex items-center gap-2.5 px-4 py-2 text-sm rounded-xl transition-all w-full text-left"
           style={{ color: 'var(--status-danger)' }}
         >
           <LogOut size={16} />
@@ -93,7 +93,7 @@ export default function Sidebar() {
 
       {/* Mobile hamburger */}
       <button
-        className="md:hidden fixed top-4 left-4 z-50 p-2 rounded-xl bg-white shadow-card border border-[--border-hairline]"
+        className="soft-action md:hidden fixed top-4 left-4 z-50 p-2 rounded-xl"
         onClick={() => setMobileOpen((v) => !v)}
         aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
       >

@@ -8,8 +8,7 @@ export default function Tabs({ tabs, defaultTab, children, className }) {
     <div className={className}>
       {/* Tab bar */}
       <div
-        className="flex gap-1 border-b mb-6"
-        style={{ borderColor: 'var(--border-hairline)' }}
+        className="flex gap-3 mb-6 flex-wrap"
         role="tablist"
         aria-label="Page tabs"
       >
@@ -22,10 +21,10 @@ export default function Tabs({ tabs, defaultTab, children, className }) {
             aria-controls={`tabpanel-${tab.key}`}
             onClick={() => setActive(tab.key)}
             className={clsx(
-              'px-5 py-2.5 text-sm font-medium rounded-t-lg transition-all -mb-px',
+              'px-5 py-2.5 text-sm font-medium rounded-xl transition-all',
               active === tab.key
-                ? 'border-b-2 border-[--brand-primary] text-[--brand-primary] bg-white'
-                : 'text-[--ink-muted] hover:text-[--ink-primary] hover:bg-[--bg-canvas]'
+                ? 'neumorphic-concave text-[--ink-primary]'
+                : 'soft-action text-[--ink-muted] hover:text-[--ink-primary]'
             )}
           >
             {tab.label}

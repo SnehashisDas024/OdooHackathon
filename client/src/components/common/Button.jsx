@@ -13,7 +13,7 @@ export default function Button({
   ...props
 }) {
   const base =
-    'inline-flex items-center justify-center gap-2 font-medium rounded-xl transition-all focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
+    'neumorphic-button inline-flex items-center justify-center gap-2 font-medium rounded-xl transition-all focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
 
   const sizes = {
     sm: 'px-4 py-2 text-sm',
@@ -23,13 +23,13 @@ export default function Button({
 
   const variants = {
     primary:
-      'bg-[--brand-primary] text-white hover:bg-[--brand-primary-hover] focus-visible:outline-[--brand-primary] shadow-sm',
+      'text-[--ink-primary] focus-visible:outline-[--brand-primary]',
     secondary:
-      'border border-[--border-hairline] bg-white text-[--ink-primary] hover:bg-[--bg-canvas] focus-visible:outline-[--brand-primary]',
+      'text-[--ink-muted] focus-visible:outline-[--brand-primary]',
     destructive:
-      'bg-[--status-danger] text-white hover:bg-red-700 focus-visible:outline-[--status-danger]',
+      'check-out-action focus-visible:outline-[--status-danger]',
     ghost:
-      'text-[--ink-primary] hover:bg-[--bg-canvas] focus-visible:outline-[--brand-primary]',
+      'text-[--ink-primary] focus-visible:outline-[--brand-primary]',
   };
 
   return (
