@@ -322,6 +322,24 @@ export async function uploadAvatar(req, res, next) {
   } catch (err) { next(err); }
 }
 
+// POST /api/v1/employees/:id/documents/resume
+export async function uploadResume(req, res, next) {
+  try {
+    if (!req.file) throw new BadRequestError('No file uploaded.');
+    const employee = await prisma.employee.findUnique({ where: { id: req.params.id } });
+    if (!employee) throw new NotFoundError();
+
+    if (req.user.role !== 'ADMIN' && req.user.userId !== employee.userId) {
+      throw new ForbiddenError('You do not have permission to upload this document.');
+    }
+
+    const url = await uploadToCloudinary(req.file.buffer, 'hrms/resumes', 'auto');
+    await prisma.employee.update({ where: { id: employee.id }, data: { resumeUrl: url } });
+
+    return success(res, { resumeUrl: url }, 'Resume updated.');
+  } catch (err) { next(err); }
+}
+
 // Skills
 export async function addSkill(req, res, next) {
   try {

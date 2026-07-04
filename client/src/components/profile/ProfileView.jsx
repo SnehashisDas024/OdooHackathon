@@ -69,6 +69,40 @@ export default function ProfileView({ employeeId, readOnly = false }) {
     mutation.mutate(form);
   };
 
+  const handleAvatarUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const loadingToast = toast.loading('Uploading avatar...');
+    try {
+      await employeeService.uploadAvatar(effectiveId, formData);
+      queryClient.invalidateQueries({ queryKey: ['employee', effectiveId] });
+      toast.success('Avatar updated!', { id: loadingToast });
+    } catch (err) {
+      toast.error(err.response?.data?.error?.message || 'Failed to upload avatar.', { id: loadingToast });
+    }
+  };
+
+  const handleResumeUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const loadingToast = toast.loading('Uploading resume...');
+    try {
+      await employeeService.uploadResume(effectiveId, formData);
+      queryClient.invalidateQueries({ queryKey: ['employee', effectiveId] });
+      toast.success('Resume uploaded!', { id: loadingToast });
+    } catch (err) {
+      toast.error(err.response?.data?.error?.message || 'Failed to upload resume.', { id: loadingToast });
+    }
+  };
+
   return (
     <div className="flex flex-col gap-6">
       {/* Profile header */}
@@ -79,7 +113,7 @@ export default function ProfileView({ employeeId, readOnly = false }) {
             <label htmlFor="avatar-upload" className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-white border flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-all"
               style={{ borderColor: 'var(--border-hairline)', boxShadow: 'var(--card-shadow)' }}>
               <Pencil size={13} style={{ color: 'var(--ink-muted)' }} />
-              <input id="avatar-upload" type="file" accept="image/*" className="hidden" />
+              <input id="avatar-upload" type="file" accept="image/*" className="hidden" onChange={handleAvatarUpload} />
             </label>
           )}
         </div>
@@ -129,6 +163,28 @@ export default function ProfileView({ employeeId, readOnly = false }) {
                 <FieldRow label="About me" value={emp?.about} />
                 <FieldRow label="What I love about my job" value={emp?.whatILove} />
                 <FieldRow label="My interests & hobbies" value={emp?.interests} />
+              </div>
+              <div className="col-span-full flex flex-col gap-4 pt-2 border-t" style={{ borderColor: 'var(--border-hairline)' }}>
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold text-sm" style={{ fontFamily: 'Sora, sans-serif', color: 'var(--ink-primary)' }}>Resume</h3>
+                  {canEdit && !readOnly && (
+                    <label htmlFor="resume-upload" className="flex items-center gap-1 text-xs cursor-pointer hover:opacity-80 transition-all" style={{ color: 'var(--brand-primary)' }}>
+                      <Plus size={13} />
+                      {emp?.resumeUrl ? 'Update Resume' : 'Upload Resume'}
+                      <input id="resume-upload" type="file" accept="application/pdf,image/*" className="hidden" onChange={handleResumeUpload} />
+                    </label>
+                  )}
+                </div>
+                {emp?.resumeUrl ? (
+                  <div>
+                    <a href={emp.resumeUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold border transition-all hover:bg-[--bg-canvas]"
+                      style={{ borderColor: 'var(--border-hairline)', color: 'var(--brand-primary)' }}>
+                      <Eye size={14} /> View / Download Resume
+                    </a>
+                  </div>
+                ) : (
+                  <span className="text-xs" style={{ color: 'var(--ink-muted)' }}>No resume uploaded yet.</span>
+                )}
               </div>
               <div className="col-span-full flex flex-col gap-3 pt-2 border-t" style={{ borderColor: 'var(--border-hairline)' }}>
                 <div className="flex items-center justify-between">

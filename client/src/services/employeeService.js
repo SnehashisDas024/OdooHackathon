@@ -18,6 +18,11 @@ export const employeeService = {
     api.post(`/employees/${id}/documents/profile-picture`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     }),
+  // POST /api/v1/employees/:id/documents/resume
+  uploadResume: (id, formData) =>
+    api.post(`/employees/${id}/documents/resume`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }),
   // Skills
   addSkill: (id, name) => api.post(`/employees/${id}/skills`, { name }),
   removeSkill: (id, skillId) => api.delete(`/employees/${id}/skills/${skillId}`),

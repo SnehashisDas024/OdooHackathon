@@ -1,13 +1,13 @@
 import { Router } from 'express';
 import {
   createEmployee, listEmployees, getMyProfile, getEmployee,
-  updateMyProfile, updateEmployee, uploadAvatar,
+  updateMyProfile, updateEmployee, uploadAvatar, uploadResume,
   addSkill, removeSkill, addCertification, removeCertification,
 } from '../controllers/employeeController.js';
 import { authMiddleware, roleMiddleware } from '../middleware/authMiddleware.js';
 import { validateRequest } from '../middleware/validateRequest.js';
 import { createEmployeeSchema } from '../validators/employeeValidators.js';
-import { uploadImage } from '../middleware/upload.js';
+import { uploadImage, uploadDocument } from '../middleware/upload.js';
 
 const router = Router();
 
@@ -34,12 +34,19 @@ router.delete('/:id/skills/:skillId', removeSkill);
 router.post('/:id/certifications', addCertification);
 router.delete('/:id/certifications/:certId', removeCertification);
 
-// Profile picture upload
+// Document uploads
 router.post('/:id/documents/profile-picture', (req, res, next) => {
   uploadImage(req, res, (err) => {
     if (err) return next(err);
     next();
   });
 }, uploadAvatar);
+
+router.post('/:id/documents/resume', (req, res, next) => {
+  uploadDocument(req, res, (err) => {
+    if (err) return next(err);
+    next();
+  });
+}, uploadResume);
 
 export default router;
