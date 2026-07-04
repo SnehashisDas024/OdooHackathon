@@ -9,8 +9,19 @@ echo.
 echo Step 1: Enter your PostgreSQL password when prompted
 echo.
 
-set PGPATH=C:\Program Files\PostgreSQL\17\bin
-set PATH=%PGPATH%;%PATH%
+if exist "C:\Program Files\PostgreSQL\18\bin" (
+    set "PGPATH=C:\Program Files\PostgreSQL\18\bin"
+) else if exist "C:\Program Files\PostgreSQL\17\bin" (
+    set "PGPATH=C:\Program Files\PostgreSQL\17\bin"
+) else if exist "C:\Program Files\PostgreSQL\16\bin" (
+    set "PGPATH=C:\Program Files\PostgreSQL\16\bin"
+) else (
+    echo PostgreSQL installation bin folder not found. Please update PGPATH in this script.
+    pause
+    exit /b
+)
+set "PATH=%PGPATH%;%PATH%"
+
 
 REM Create DB (may fail if already exists - that's ok)
 "%PGPATH%\psql.exe" -U postgres -c "CREATE DATABASE hrms_db;" 2>nul

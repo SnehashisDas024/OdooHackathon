@@ -9,7 +9,7 @@ const router = Router();
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 min
-  max: process.env.NODE_ENV === 'production' ? 10 : 100, // generous in dev
+  max: process.env.NODE_ENV === 'production' ? 10 : 999999, // generous in dev
   message: { success: false, error: { code: 'RATE_LIMITED', message: 'Too many attempts. Try again in 15 minutes.' } },
 });
 

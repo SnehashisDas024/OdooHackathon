@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 5000;
 async function main() {
   try {
     await prisma.$connect();
-    console.log('✅ Connected to PostgreSQL database');
+    console.log('✅ Connected to database');
 
     app.listen(PORT, () => {
       console.log(`🚀 HRMS API running on http://localhost:${PORT}`);
