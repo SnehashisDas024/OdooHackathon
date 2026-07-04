@@ -44,8 +44,8 @@ export default function SignInPage() {
         <div className="neumorphic-concave mb-5 p-3 rounded-xl text-xs">
           <p className="font-medium mb-1.5" style={{ color: 'var(--ink-primary)', fontFamily: 'Avenir Next, Nunito, Inter, sans-serif' }}>Demo Accounts</p>
           <div className="flex flex-col gap-1" style={{ color: 'var(--ink-muted)', fontFamily: 'IBM Plex Mono, monospace' }}>
-            <span>👑 admin@hrms.com / Admin@1234</span>
-            <span>👤 arjun.sharma@hrms.com / Employee@1234</span>
+            <span> admin@hrms.com / Admin@1234</span>
+            <span> arjun.sharma@hrms.com / Employee@1234</span>
           </div>
         </div>
         <SignInForm />
