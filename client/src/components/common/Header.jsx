@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { ChevronDown, User, LogOut, Clock, CheckCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
@@ -10,6 +11,7 @@ import toast from 'react-hot-toast';
 
 export default function Header() {
   const { user, isAdmin, signOut } = useAuth();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [dropOpen, setDropOpen] = useState(false);
   const [checkInData, setCheckInData] = useState(null);
@@ -23,6 +25,19 @@ export default function Header() {
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, []);
+
+  // Fetch today status on mount
+  useEffect(() => {
+    if (user) {
+      attendanceService.getTodayStatus()
+        .then(res => {
+          if (res.data?.data?.record) {
+            setCheckInData(res.data.data.record);
+          }
+        })
+        .catch(console.error);
+    }
+  }, [user]);
 
   // Elapsed timer
   useEffect(() => {
@@ -40,8 +55,9 @@ export default function Header() {
   const handleCheckIn = async () => {
     setCheckLoading(true);
     try {
-      const { data } = await attendanceService.checkIn();
-      setCheckInData(data);
+      const res = await attendanceService.checkIn();
+      setCheckInData(res.data.data.record);
+      queryClient.invalidateQueries({ queryKey: ['attendance'] });
       toast.success('Checked in! Have a great day.');
     } catch {
       toast.error('Could not check in. Try again.');
@@ -54,8 +70,10 @@ export default function Header() {
     setCheckLoading(true);
     try {
       await attendanceService.checkOut();
-      setCheckInData(null);
+      const res = await attendanceService.getTodayStatus();
+      setCheckInData(res.data.data.record);
       setElapsed('');
+      queryClient.invalidateQueries({ queryKey: ['attendance'] });
       toast.success('Checked out. See you tomorrow!');
     } catch {
       toast.error('Could not check out. Try again.');
@@ -81,7 +99,7 @@ export default function Header() {
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl border" style={{ borderColor: 'var(--border-hairline)' }}>
             <BufferAnimation variant="clock-spin" size="sm" caption="" />
           </div>
-        ) : checkInData ? (
+        ) : checkInData?.checkIn && !checkInData?.checkOut ? (
           <button
             onClick={handleCheckOut}
             className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl border transition-all hover:bg-[--bg-canvas]"
@@ -91,6 +109,11 @@ export default function Header() {
             <span className="font-mono text-xs">{elapsed}</span>
             <span>Check Out</span>
           </button>
+        ) : checkInData?.checkOut ? (
+          <div className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl border bg-[--bg-canvas]" style={{ borderColor: 'var(--border-hairline)', color: 'var(--ink-muted)' }}>
+             <CheckCircle size={16} />
+             <span>Checked Out</span>
+          </div>
         ) : (
           <button
             onClick={handleCheckIn}

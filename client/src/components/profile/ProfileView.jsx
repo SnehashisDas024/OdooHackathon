@@ -36,12 +36,12 @@ export default function ProfileView({ employeeId, readOnly = false }) {
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['employee', effectiveId],
-    queryFn: () => employeeService.getById(effectiveId).then((r) => r.data),
+    queryFn: () => (employeeId ? employeeService.getById(effectiveId) : employeeService.getMe()).then((r) => r.data.data),
     enabled: !!effectiveId,
   });
 
   const mutation = useMutation({
-    mutationFn: (updated) => employeeService.update(effectiveId, updated),
+    mutationFn: (updated) => (employeeId ? employeeService.update(effectiveId, updated) : employeeService.updateMe(updated)),
     onSuccess: () => {
       queryClient.invalidateQueries(['employee', effectiveId]);
       setEditMode(false);
